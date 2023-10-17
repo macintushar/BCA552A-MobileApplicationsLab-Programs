@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/popup_menu_item1"
+        android:title="Show Airplane Image" />
+    <item
+        android:id="@+id/popup_menu_item2"
+        android:title="Confirm Booking" />
+    <item
+        android:id="@+id/popup_menu_item3"
+        android:title="Show Ticket Details" />
+</menu>
