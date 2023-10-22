@@ -7,28 +7,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBHandler extends SQLiteOpenHelper {
-
-    // creating a constant variables for our database.
-    // below variable is for our database name.
     private static final String DB_NAME = "usersDB";
-
-    // below int is our database version
     private static final int DB_VERSION = 1;
-
-    // below variable is for our table name.
     private static final String TABLE_NAME = "users";
-
-    // below variable is for our id column.
     private static final String ID_COL = "id";
-
-    // below variable is for our course name column
     private static final String USERNAME_COL = "username";
-
-    // below variable id for our course duration column.
     private static final String PASSWORD_COL = "password";
-
-    // below variable for our course description column.
     private static final String EMAIL_COL = "email";
+    private static final String VIN_COL = "vin";
 
     // creating a constructor for our database handler.
     public DBHandler(Context context) {
@@ -46,7 +32,8 @@ public class DBHandler extends SQLiteOpenHelper {
                 + ID_COL + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + USERNAME_COL + " TEXT,"
                 + EMAIL_COL + " TEXT,"
-                + PASSWORD_COL + " TEXT)";
+                + PASSWORD_COL + " TEXT,"
+                + VIN_COL + "TEXT)";
 
         // at last we are calling a exec sql
         // method to execute above sql query
@@ -54,7 +41,7 @@ public class DBHandler extends SQLiteOpenHelper {
     }
 
     // this method is use to add new course to our sqlite database.
-    public void addNewUser(String username, String password, String email) {
+    public void addNewUser(String username, String password, String email, String vin) {
 
         // on below line we are creating a variable for
         // our sqlite database and calling writable method
@@ -70,7 +57,7 @@ public class DBHandler extends SQLiteOpenHelper {
         values.put(USERNAME_COL, username);
         values.put(EMAIL_COL, email);
         values.put(PASSWORD_COL, password);
-
+        values.put(VIN_COL, vin);
         // after adding all values we are passing
         // content values to our table.
         db.insert(TABLE_NAME, null, values);
