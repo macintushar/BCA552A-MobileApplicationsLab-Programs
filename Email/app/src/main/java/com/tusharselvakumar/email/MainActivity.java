@@ -2,21 +2,13 @@ package com.tusharselvakumar.email;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+import io.github.cdimascio.dotenv.Dotenv;
 
-import java.net.PasswordAuthentication;
-import java.util.Properties;
-
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -45,10 +37,18 @@ public class MainActivity extends AppCompatActivity {
 //
 //                intent.setType("message/rfc822");
 //                startActivity(Intent.createChooser(intent, "Choose an Email client :"));
+                try {
+                    EmailSender emailSender = new EmailSender("[EMAIL]", "[APP_PASSWORD]", emails, subject, message);
+                    emailSender.execute();
 
-                EmailSender emailSender = new EmailSender("emailbycode@gmail.com","Tusharsk911",emails,subject,message);
-                emailSender.execute();
+                    Toast.makeText(getApplicationContext(), "Email Sent", Toast.LENGTH_SHORT).show();
 
+                    emailID.setText("");
+                    emailSubject.setText("");
+                    emailMessage.setText("");
+                } catch (Exception e) {
+                    Toast.makeText(getApplicationContext(), "Error: " + e, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
