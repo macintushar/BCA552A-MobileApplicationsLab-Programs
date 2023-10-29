@@ -28,8 +28,6 @@ public class HomePage extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         String value = sharedPreferences.getString("userEmail", "en");
-//        Toast t = Toast.makeText(getApplicationContext(),value, Toast.LENGTH_SHORT);
-//        t.show();
 
         TextView textView = (TextView) findViewById(R.id.textView);
         textView.setText("Hello, " + value);

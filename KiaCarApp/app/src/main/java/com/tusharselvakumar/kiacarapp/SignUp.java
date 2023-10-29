@@ -2,6 +2,7 @@ package com.tusharselvakumar.kiacarapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,10 +11,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
 
 import com.google.android.material.snackbar.Snackbar;
 
 public class SignUp extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,15 +55,34 @@ public class SignUp extends AppCompatActivity {
                 String pwd2 = password2.getText().toString();
 
                 if (Validations(emailText,nameText,VINText,engineNumberText,pwd1,pwd2)) {
-                    Snackbar.make(v,"Signed Up. Redirecting to Login..",Snackbar.LENGTH_LONG).show();
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            Intent i = new Intent(SignUp.this, Login.class);
-                            startActivity(i);
-                            finish();
-                        }
-                    },3000);
+                    try{
+                        // Create a DatabaseHelper instance
+                        DatabaseHelper dbHelper = new DatabaseHelper(getApplicationContext());
+                        SQLiteDatabase database = dbHelper.getWritableDatabase();
+
+                        ContentValues values = new ContentValues();
+                        values.put("Email", emailText);
+                        values.put("Name", nameText);
+                        values.put("VIN", VINText);
+                        values.put("EngineNumber", engineNumberText);
+                        values.put("Password", pwd1);
+
+                        database.insert("login", null, values);
+                        database.close();
+
+                        Snackbar.make(v,"Signed Up. Redirecting to Login..",Snackbar.LENGTH_LONG).show();
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Intent i = new Intent(SignUp.this, Login.class);
+                                startActivity(i);
+                                finish();
+                            }
+                        },3000);
+                    }
+                    catch (Exception  e) {
+                        Snackbar.make(v,"Unable to Sign Up. Please try again.",Snackbar.LENGTH_LONG).show();
+                    }
                 }
             }
         });
