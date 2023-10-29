@@ -8,14 +8,18 @@ public class EmailSender extends AsyncTask<Void, Void, Boolean> {
 
     private String username;
     private String password;
-    private String emailID;
+    private String emailIDTo;
+    private String emailIDCC;
+    private String emailIDBCC;
     private String emailBody;
     private String emailSubject;
 
-    public EmailSender(String username, String password, String emailAddress, String emailSubject, String emailBody) {
+    public EmailSender(String username, String password, String emailAddressTo, String emailAddressCC, String emailAddressBCC, String emailSubject, String emailBody) {
         this.username = username;
         this.password = password;
-        this.emailID = emailAddress;
+        this.emailIDTo = emailAddressTo;
+        this.emailIDCC = emailAddressCC;
+        this.emailIDBCC = emailAddressBCC;
         this.emailSubject = emailSubject;
         this.emailBody = emailBody;
     }
@@ -39,7 +43,9 @@ public class EmailSender extends AsyncTask<Void, Void, Boolean> {
         try {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(username));
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(emailID));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(emailIDTo));
+            message.setRecipients(Message.RecipientType.CC, InternetAddress.parse(emailIDCC));
+            message.setRecipients(Message.RecipientType.BCC, InternetAddress.parse(emailIDBCC));
             message.setSubject(emailSubject);
             message.setText(emailBody);
             Transport.send(message);
