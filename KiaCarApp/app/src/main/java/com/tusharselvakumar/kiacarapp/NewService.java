@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,6 +16,7 @@ import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -22,7 +24,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 
 public class NewService extends AppCompatActivity {
-
+    private SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,11 +86,24 @@ public class NewService extends AppCompatActivity {
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(NewService.this);
                 alertDialogBuilder.setTitle("Confirm Service?");
                 alertDialogBuilder.setMessage(confirmationMsg);
-
                     alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Snackbar.make(v,"Service Booked",Snackbar.LENGTH_LONG).show();
+
+                        sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+                        String userEmail = sharedPreferences.getString("userEmail", "en");
+
+                        String emailTo = userEmail;
+                        String subject = "Kia Service | Service Scheduled on " + selectedDate[0];
+                        String msg = "You have scheduled a service at " + serviceCenterName[0] + " for a " + selectedServiceType + " on " + selectedDate[0] + " " + waterWashConfirmation[0];
+
+                        try {
+                            EmailSender emailSender = new EmailSender("emailbycode@gmail.com", "edmfcwnnsabnpbap", emailTo, subject, msg);
+                            emailSender.execute();
+                        } catch (Exception e) {
+                            Toast.makeText(getApplicationContext(), "Error: " + e, Toast.LENGTH_SHORT).show();
+                        }
 
                         Intent serviceConfirm = new Intent(NewService.this, ServiceConfirmSplash.class);
                         startActivity(serviceConfirm);

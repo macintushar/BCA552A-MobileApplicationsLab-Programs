@@ -27,10 +27,9 @@ public class Login extends AppCompatActivity {
         String value = sharedPreferences.getString("userEmail", "en");
 
         if (!value.equals("en")) {
-            // User is already logged in, so redirect to the HomePage activity.
             Intent intent = new Intent(getApplicationContext(), HomePage.class);
             startActivity(intent);
-            finish(); // Finish the Login activity to prevent going back.
+            finish();
         }
 
         btn.setOnClickListener(new View.OnClickListener() {
